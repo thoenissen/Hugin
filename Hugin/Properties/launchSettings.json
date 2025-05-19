@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    },
+    "InstallCommand": {
+      "commandName": "Project",
+      "commandLineArgs": "installCommands",
+      "environmentVariables": {
+        "HUGIN_CONFIG_FILE_PATH": "$(ProjectDir)configuration.json"
+      }
+    },
+    "Execute": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "HUGIN_CONFIG_FILE_PATH": "$(ProjectDir)configuration.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hugin", "Hugin\Hugin.csproj", "{758A5B9F-42C2-4E75-AABB-A04AA3A48226}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\docker-publish.yml = .github\workflows\docker-publish.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MIsc", "MIsc", "{596224FF-17B1-4FB7-BAB5-9D45EA6521D4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		StyleCop.Debug.ruleset = StyleCop.Debug.ruleset
+		stylecop.json = stylecop.json
+		StyleCop.Release.ruleset = StyleCop.Release.ruleset
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{758A5B9F-42C2-4E75-AABB-A04AA3A48226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{758A5B9F-42C2-4E75-AABB-A04AA3A48226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{758A5B9F-42C2-4E75-AABB-A04AA3A48226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{758A5B9F-42C2-4E75-AABB-A04AA3A48226}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB4B0E7E-520D-4E0F-95D2-8585667438AD}
+	EndGlobalSection
+EndGlobal

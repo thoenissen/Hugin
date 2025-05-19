@@ -1,0 +1,25 @@
+name: Publish to docker hub
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  docker_publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1.12.0
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build
+      run: docker build . --file ./Hugin/Dockerfile --tag thoenissen/hugin:latest
+
+    - name: Push
+      run: docker push thoenissen/hugin
