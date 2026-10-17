@@ -10,6 +10,7 @@ using Discord.WebSocket;
 using Hugin.Data;
 using Hugin.Discord.CommandHandler;
 using Hugin.Discord.SlashCommands;
+using Hugin.Discord.TypeConverters;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -119,6 +120,8 @@ public static class Program
 
         var discordInteraction = new InteractionService(discordClient);
 
+        discordInteraction.AddTypeConverter<Server>(new ServerTypeConverter());
+
         await discordInteraction.AddModuleAsync<ServerSlashCommands>(BuildServiceProvider()).ConfigureAwait(false);
 
         await discordInteraction.RegisterCommandsToGuildAsync(configuration.GuildId)
@@ -156,6 +159,7 @@ public static class Program
 
         _discordInteraction = new InteractionService(_discordClient, interactionConfiguration);
         _discordInteraction.Log += OnDiscordInteractionServiceLog;
+        _discordInteraction.AddTypeConverter<Server>(new ServerTypeConverter());
 
         await _discordInteraction.AddModuleAsync<ServerSlashCommands>(_serviceProvider)
                                  .ConfigureAwait(false);

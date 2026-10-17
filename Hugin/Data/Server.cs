@@ -3,7 +3,7 @@
 /// <summary>
 /// Server
 /// </summary>
-internal class Server
+public class Server
 {
     /// <summary>
     /// Name

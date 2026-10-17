@@ -2,6 +2,7 @@
 
 using Discord.Interactions;
 
+using Hugin.Data;
 using Hugin.Discord.CommandHandler;
 
 namespace Hugin.Discord.SlashCommands;
@@ -26,33 +27,36 @@ public sealed class ServerSlashCommands : SlashCommandsBase
     /// <summary>
     /// Get the current status of the server
     /// </summary>
+    /// <param name="server">Server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
     [SlashCommand("status", "Current server status")]
-    public async Task Status()
+    public async Task Status([Summary("server", "Name of the server")] Server server = null)
     {
-        await CommandHandler.PostStatus(Context)
+        await CommandHandler.PostStatus(Context, server)
                             .ConfigureAwait(false);
     }
 
     /// <summary>
     /// Get the server logs
     /// </summary>
+    /// <param name="server">Server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
     [SlashCommand("logs", "Server logs")]
-    public async Task Logs()
+    public async Task Logs([Summary("server", "Name of the server")] Server server = null)
     {
-        await CommandHandler.PostLogs(Context)
+        await CommandHandler.PostLogs(Context, server)
                             .ConfigureAwait(false);
     }
 
     /// <summary>
     /// Restarts the server
     /// </summary>
+    /// <param name="server">Server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
     [SlashCommand("restart", "Restart the server")]
-    public async Task Restart()
+    public async Task Restart([Summary("server", "Name of the server")] Server server = null)
     {
-        await CommandHandler.RestartServer(Context)
+        await CommandHandler.RestartServer(Context, server)
                             .ConfigureAwait(false);
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,24 +23,66 @@ public class ServerCommandHandler
     #region Methods
 
     /// <summary>
+    /// Determine the server configuration which should be used by the command
+    /// </summary>
+    /// <param name="context">Context</param>
+    /// <param name="server">Selected server</param>
+    /// <returns>The server configuration or <see langword="null"/> if no valid server could be determined</returns>
+    /// <remarks>If no valid server could be determined, the original response is modified with an error message.</remarks>
+    private static async Task<Server> GetServerConfiguration(IInteractionContext context, Server server)
+    {
+        var channelServers = Configuration.Current.Servers.FindAll(s => s.ChannelId == context.Channel.Id);
+
+        string errorMessage = null;
+
+        if (server != null)
+        {
+            if (channelServers.Contains(server) == false)
+            {
+                errorMessage = $"The server '{server.Name}' is not assigned to this channel.";
+            }
+        }
+        else if (channelServers.Count == 0)
+        {
+            errorMessage = "No server is assigned to this channel.";
+        }
+        else if (channelServers.Count == 1)
+        {
+            server = channelServers[0];
+        }
+        else
+        {
+            errorMessage = $"Multiple servers are assigned to this channel. Please select one of the following servers: {string.Join(", ", channelServers.Select(s => s.Name))}";
+        }
+
+        if (errorMessage != null)
+        {
+            await context.Interaction
+                         .ModifyOriginalResponseAsync(msg => msg.Content = errorMessage)
+                         .ConfigureAwait(false);
+
+            return null;
+        }
+
+        return server;
+    }
+
+    /// <summary>
     /// Post the current status of the server
     /// </summary>
     /// <param name="context">Context</param>
+    /// <param name="server">Selected server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
-    public async Task PostStatus(IInteractionContext context)
+    public async Task PostStatus(IInteractionContext context, Server server)
     {
         await context.Interaction
                      .RespondAsync("Getting server status...")
                      .ConfigureAwait(false);
 
-        var serverConfiguration = Configuration.Current.Servers.Find(s => s.ChannelId == context.Channel.Id);
+        var serverConfiguration = await GetServerConfiguration(context, server).ConfigureAwait(false);
 
         if (serverConfiguration == null)
         {
-            await context.Interaction
-                         .ModifyOriginalResponseAsync(msg => msg.Content = "No server is assigned to this channel.")
-                         .ConfigureAwait(false);
-
             return;
         }
 
@@ -79,21 +122,18 @@ public class ServerCommandHandler
     /// Post the server logs
     /// </summary>
     /// <param name="context">Context</param>
+    /// <param name="server">Selected server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
-    public async Task PostLogs(IInteractionContext context)
+    public async Task PostLogs(IInteractionContext context, Server server)
     {
         await context.Interaction
                      .RespondAsync("Getting server logs...")
                      .ConfigureAwait(false);
 
-        var serverConfiguration = Configuration.Current.Servers.Find(s => s.ChannelId == context.Channel.Id);
+        var serverConfiguration = await GetServerConfiguration(context, server).ConfigureAwait(false);
 
         if (serverConfiguration == null)
         {
-            await context.Interaction
-                         .ModifyOriginalResponseAsync(msg => msg.Content = "No server is assigned to this channel.")
-                         .ConfigureAwait(false);
-
             return;
         }
 
@@ -164,21 +204,18 @@ public class ServerCommandHandler
     /// Restarts the server
     /// </summary>
     /// <param name="context">Context</param>
+    /// <param name="server">Selected server</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation</returns>
-    public async Task RestartServer(IInteractionContext context)
+    public async Task RestartServer(IInteractionContext context, Server server)
     {
         await context.Interaction
                      .RespondAsync("Getting server status...")
                      .ConfigureAwait(false);
 
-        var serverConfiguration = Configuration.Current.Servers.Find(s => s.ChannelId == context.Channel.Id);
+        var serverConfiguration = await GetServerConfiguration(context, server).ConfigureAwait(false);
 
         if (serverConfiguration == null)
         {
-            await context.Interaction
-                         .ModifyOriginalResponseAsync(msg => msg.Content = "No server is assigned to this channel.")
-                         .ConfigureAwait(false);
-
             return;
         }
 
